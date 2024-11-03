@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Portal - Login/Signup</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Login Form -->
+        <div class="form-container" id="loginForm">
+            <h2>Welcome Back!</h2>
+            <form action="/login" method="POST">
+                <div class="form-group">
+                    <input type="email" name="email" required placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" required placeholder="Password">
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" onclick="toggleForms()">Sign Up</a></p>
+        </div>
+
+        <!-- Signup Form -->
+        <div class="form-container hidden" id="signupForm">
+            <h2>Create Account</h2>
+            <form action="/signup" method="POST">
+                <div class="form-group">
+                    <select name="user_type" required>
+                        <option value="">Select User Type</option>
+                        <option value="alumni">Alumni</option>
+                        <option value="student">Student</option>
+                        <option value="employer">Employer</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" required placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <input type="tel" name="phone" required placeholder="Phone Number">
+                </div>
+                <div class="form-group name-group">
+                    <input type="text" name="first_name" required placeholder="First Name">
+                    <input type="text" name="middle_name" placeholder="Middle Name">
+                    <input type="text" name="last_name" required placeholder="Last Name">
+                </div>
+                <div class="form-group">
+                    <input type="number" name="graduation_year" required placeholder="Year of Graduation">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="branch" required placeholder="Branch of Study">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" required placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="confirm_password" required placeholder="Confirm Password">
+                </div>
+                <button type="submit" class="btn">Sign Up</button>
+            </form>
+            <p>Already have an account? <a href="#" onclick="toggleForms()">Login</a></p>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>
