@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Listings</title>
+    <link rel="stylesheet" href="css/job_listing_styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">AlumNet</div>
+            <div class="nav-links">
+                <a href="#">Forums</a>
+                <a href="#">Connections</a>
+                <a href="#">Jobs</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Job Listings</h1>
+        <div class="job-listings">
+            <!-- Job Box Example -->
+            <div class="job-box" onclick="window.location.href='job_details.html?id=1'">
+                <h2>Software Engineer</h2>
+                <p>Role: Full-Time</p>
+                <p>Application Deadline: 2023-12-31</p>
+            </div>
+            <div class="job-box" onclick="window.location.href='job_details.html?id=2'">
+                <h2>Marketing Intern</h2>
+                <p>Role: Internship</p>
+                <p>Application Deadline: 2023-11-15</p>
+            </div>
+            <div class="job-box" onclick="window.location.href='job_details.html?id=3'">
+                <h2>Data Analyst</h2>
+                <p>Role: Part-Time</p>
+                <p>Application Deadline: 2023-12-15</p>
+            </div>
+            <!-- Add more job boxes as needed -->
+        </div>
+
+        <div class="actions">
+            <button class="btn" onclick="window.location.href='post_job.html'">Post a Job</button>
+        </div>
+    </div>
+
+    <script>
+        // You can add JavaScript here or link to an external file
+    </script>
+</body>
+</html>

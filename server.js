@@ -3,6 +3,7 @@ const path = require('path');
 const session = require('express-session'); // Add this package: npm install express-session
 const app = express();
 
+
 // Middleware
 app.use(express.json());
 app.use(express.static('public'));
