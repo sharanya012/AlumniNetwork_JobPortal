@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumNet - Alumni Profile</title>
+    <link rel="stylesheet" href="profile_styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">AlumNet</div>
+            <div class="nav-links">
+                <a href="#">Forums</a>
+                <a href="#">Connections</a>
+                <a href="#">Jobs</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section class="profile-header card">
+            <div class="profile-pic">
+                <img src="profile-picture.jpg" alt="Profile Picture" />
+            </div>
+            <div class="profile-info">
+                <h2>John Doe</h2>
+                <p>Branch: Computer Science | Batch: 2024</p>
+                <div class="profile-stats">
+                    <div>
+                        <span class="stat">150</span>
+                        <span class="stat-label">Connections</span>
+                    </div>
+                    <div>
+                        <span class="stat">25</span>
+                        <span class="stat-label">Posts</span>
+                    </div>
+                </div>
+                <button class="btn connections-button">Connect</button>
+            </div>
+        </section>
+
+        <section class="bio-status card">
+            <h3 class="section-title">Thoughts</h3>
+            <textarea placeholder="Share your thoughts..." rows="3"></textarea>
+            <button class="btn btn-secondary">Post</button>
+        </section>
+
+        <section class="resume-upload card">
+            <h3 class="section-title">Resume</h3>
+            <input type="file" accept=".pdf,.doc,.docx" id="resume-file" style="display: none;" />
+            <label for="resume-file" class="btn btn-secondary">Choose File</label>
+            <button class="btn">Upload</button>
+        </section>
+
+        <section class="work-experience card">
+            <h3 class="section-title">Work Experience</h3>
+            <form class="experience-form">
+                <input type="text" placeholder="Job Title" required />
+                <input type="text" placeholder="Company Name" required />
+                <input type="text" placeholder="Duration (e.g. Jan 2020 - Present)" required />
+                <textarea placeholder="Responsibilities/Tasks" rows="4" required></textarea>
+                <button type="submit" class="btn">Add Experience</button>
+            </form>
+            <div class="experience-list">
+                <!-- Example experience item -->
+                <div class="experience-item">
+                    <h4>Software Engineer</h4>
+                    <p>Tech Innovations Inc.</p>
+                    <p>Jan 2022 - Present</p>
+                    <p>Developed scalable web applications using React and Node.js.</p>
+                    <div class="tags">
+                        <span class="tag">React</span>
+                        <span class="tag">Node.js</span>
+                        <span class="tag">AWS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="forums card">
+            <h3 class="section-title">Forums</h3>
+            <ul>
+                <li class="tooltip">
+                    Tech Innovators
+                    <span class="tooltiptext">Discuss latest tech trends</span>
+                </li>
+                <li class="tooltip">
+                    Career Development
+                    <span class="tooltiptext">Share career advice and opportunities</span>
+                </li>
+                <li class="tooltip">
+                    Startup Network
+                    <span class="tooltiptext">Connect with fellow entrepreneurs</span>
+                </li>
+                <li class="tooltip">
+                    Alumni Meetups
+                    <span class="tooltiptext">Organize and join alumni events</span>
+                </li>
+            </ul>
+        </section>
+    </div>
+
+    <script>
+        // You can add JavaScript here or link to an external file
+    </script>
+</body>
+</html>
