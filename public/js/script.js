@@ -7,7 +7,6 @@ function toggleForms() {
     signupForm.classList.toggle('hidden');
 }
 
-// Form validation and submission
 document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -30,8 +29,11 @@ document.querySelectorAll('form').forEach(form => {
         
         try {
             // Determine if this is login or signup
-            const endpoint = form.id === 'loginForm' ? '/api/login' : '/api/signup';
+            const endpoint = form.closest('.form-container').id === 'loginForm' ? '/api/login' : '/api/signup';
             
+            console.log('Sending request to:', endpoint);
+            console.log('With data:', data);
+
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
@@ -41,14 +43,16 @@ document.querySelectorAll('form').forEach(form => {
             });
             
             const result = await response.json();
+            console.log('Server response:', result);
             
             if (result.success) {
+                alert(result.message); // Add this to see success message
                 window.location.href = result.redirect;
             } else {
                 alert(result.message);
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Detailed error:', error);
             alert('An error occurred. Please try again.');
         }
     });

@@ -34,10 +34,14 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log('Login attempt:', { email, password });  // Add this
 
         // Find user by email
         const user = await User.findByEmail(email);
+        console.log('User found:', user);  // Add this
+
         if (!user) {
+            console.log('No user found with this email');  // Add this
             return res.status(401).json({
                 success: false,
                 message: 'Invalid email or password'
@@ -46,6 +50,8 @@ router.post('/login', async (req, res) => {
 
         // Verify password
         const isValidPassword = await User.verifyPassword(password, user.password_hash);
+        console.log('Password verification result:', isValidPassword);  // Add this
+
         if (!isValidPassword) {
             return res.status(401).json({
                 success: false,
@@ -59,7 +65,7 @@ router.post('/login', async (req, res) => {
             redirect: '/dashboard'
         });
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('Detailed login error:', error);  // Modified this
         res.status(500).json({
             success: false,
             message: 'An error occurred during login'
