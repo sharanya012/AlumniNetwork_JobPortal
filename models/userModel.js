@@ -47,6 +47,18 @@ class User {
     static async verifyPassword(plainPassword, hashedPassword) {
         return await bcrypt.compare(plainPassword, hashedPassword);
     }
+
+    static async findById(id) {
+        try {
+            const [rows] = await db.execute(
+                'SELECT * FROM users WHERE id = ?',
+                [id]
+            );
+            return rows[0];
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 module.exports = User;

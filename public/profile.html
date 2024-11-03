@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumNet - Alumni Profile</title>
+    <link rel="stylesheet" href="css/profile_styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="js/profile.js"></script>
+</head>
+<body>
+ <!-- Add this before closing body tag -->
+ 
+    <header>
+        <nav>
+            <div class="logo">AlumNet</div>
+            <div class="nav-links">
+                <a href="#">Forums</a>
+                <a href="#">Connections</a>
+                <a href="#">Jobs</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section class="profile-header card">
+            <div class="profile-pic">
+                <img src="placeholder-profile.jpg" alt="Profile Picture" />
+            </div>
+            <div class="profile-info">
+                <h2 class="profile-name">John Doe</h2>
+                <p>Branch: Computer Science | Batch: 2024</p>
+                <div class="profile-stats">
+                    <div>
+                        <span class="stat">150</span>
+                        <span class="stat-label">Connections</span>
+                    </div>
+                    <div>
+                        <span class="stat">25</span>
+                        <span class="stat-label">Posts</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bio-status card">
+            <h3 class="section-title">Share Your Thoughts</h3>
+            <textarea id="thoughts" placeholder="What's on your mind?" rows="3"></textarea>
+            <button class="btn btn-secondary" onclick="postThoughts()">Post</button>
+            <div id="thoughts-display" class="thoughts-display"></div>
+        </section>
+
+        <section class="resume-upload card">
+            <h3 class="section-title">Resume</h3>
+            <input type="file" accept=".pdf,.doc,.docx" id="resume-file" style="display: none;" />
+            <label for="resume-file" class="btn btn-secondary">Choose File</label>
+            <button class="btn" onclick="uploadResume()">Upload</button>
+            <p id="resume-link" class="resume-link"></p>
+        </section>
+
+        <section class="social-media card">
+            <h3 class="section-title">Social Media Links</h3>
+            <input type="text" id="linkedin" placeholder="LinkedIn URL" />
+            <input type="text" id="github" placeholder="GitHub URL" />
+            <input type="text" id="website" placeholder="Personal Website URL" />
+            <button class="btn" onclick="addSocialLinks()">Add Links</button>
+            <div id="social-links" class="social-links"></div>
+        </section>
+
+        <section class="work-experience card">
+            <h3 class="section-title">Work Experience</h3>
+            <button class="btn" id="update-button" onclick="toggleExperienceForm()">Update Experience</button>
+            <form class="experience-form" id="experience-form" style="display: none;" onsubmit="addExperience(event)">
+                <input type="text" id="job-title" placeholder="Job Title" required />
+                <input type="text" id="company-name" placeholder="Company Name" required />
+                <input type="text" id="duration" placeholder="Duration (e.g. Jan 2020 - Present)" required />
+                <textarea id="responsibilities" placeholder="Responsibilities/Tasks" rows="4" required></textarea>
+                <button type="submit" class="btn">Add Experience</button>
+            </form>
+            <div class="experience-list" id="experience-list"></div>
+        </section>
+
+        <section class="forums card">
+            <h3 class="section-title">Forums</h3>
+            <ul>
+                <li class="tooltip">Tech Innovators<span class="tooltiptext">Discuss latest tech trends</span></li>
+                <li class="tooltip">Career Development<span class="tooltiptext">Share career advice and opportunities</span></li>
+                <li class="tooltip">Startup Network<span class="tooltiptext">Connect with fellow entrepreneurs</span></li>
+                <li class="tooltip">Alumni Meetups<span class="tooltiptext">Organize and join alumni events</span></li>
+            </ul>
+        </section>
+    </div>
+
+    <script>
+        function uploadResume() {
+            const fileInput = document.getElementById('resume-file');
+            const resumeLink = document.getElementById('resume-link');
+            if (fileInput.files.length > 0) {
+                const fileName = fileInput.files[0].name ;
+                resumeLink.textContent = `Resume: ${fileName}`;
+                resumeLink.href = URL.createObjectURL(fileInput.files[0]);
+            }
+        }
+
+        function addSocialLinks() {
+            const linkedinInput = document.getElementById('linkedin');
+            const githubInput = document.getElementById('github');
+            const websiteInput = document.getElementById('website');
+            const socialLinksDiv = document.getElementById('social-links');
+
+            const linkedinLink = document.createElement('a');
+            linkedinLink.href = linkedinInput.value;
+            linkedinLink.textContent = 'LinkedIn';
+            socialLinksDiv.appendChild(linkedinLink);
+
+            const githubLink = document.createElement('a');
+            githubLink.href = githubInput.value;
+            githubLink.textContent = 'GitHub';
+            socialLinksDiv.appendChild(githubLink);
+
+            const websiteLink = document.createElement('a');
+            websiteLink.href = websiteInput.value;
+            websiteLink.textContent = 'Personal Website';
+            socialLinksDiv.appendChild(websiteLink);
+        }
+
+        function postThoughts() {
+            const thoughtsInput = document.getElementById('thoughts');
+            const thoughtsDisplay = document.getElementById('thoughts-display');
+            const thought = document.createElement('p');
+            thought.textContent = thoughtsInput.value;
+            thoughtsDisplay.appendChild(thought);
+            thoughtsInput.value = '';
+        }
+
+        function toggleExperienceForm() {
+            const experienceForm = document.getElementById('experience-form');
+            const updateButton = document.getElementById('update-button');
+            if (experienceForm.style.display === 'none') {
+                experienceForm.style.display = 'block';
+                updateButton.textContent = 'Hide Experience Form';
+            } else {
+                experienceForm.style.display = 'none';
+                updateButton.textContent = 'Update Experience';
+            }
+        }
+
+        function addExperience(event) {
+            event.preventDefault();
+            const jobTitleInput = document.getElementById('job-title');
+            const companyNameInput = document.getElementById('company-name');
+            const durationInput = document.getElementById('duration');
+            const responsibilitiesInput = document.getElementById('responsibilities');
+            const experienceListDiv = document.getElementById('experience-list');
+
+            const experienceItem = document.createElement('div');
+            experienceItem.className = 'experience-item';
+
+            const jobTitle = document.createElement('h4');
+            jobTitle.textContent = jobTitleInput.value;
+            experienceItem.appendChild(jobTitle);
+
+            const companyName = document.createElement('p');
+            companyName.textContent = companyNameInput.value;
+            experienceItem.appendChild(companyName);
+
+            const duration = document.createElement('p');
+            duration.textContent = durationInput.value;
+            experienceItem.appendChild(duration);
+
+            const responsibilities = document.createElement('p');
+            responsibilities.textContent = responsibilitiesInput.value;
+            experienceItem.appendChild(responsibilities);
+
+            experienceListDiv.appendChild(experienceItem);
+        }
+    </script>
+</body>
+</html>
