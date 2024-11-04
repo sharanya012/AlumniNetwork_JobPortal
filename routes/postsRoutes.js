@@ -16,33 +16,35 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// Get all posts
+// routes/postsRoutes.js
 router.get('/', async (req, res) => {
-    try {
-        const posts = await Post.findAll();
-        res.json(posts);
-    } catch (error) {
-        console.error('Error fetching posts:', error);
-        res.status(500).json({ message: 'Error fetching posts' });
-    }
+    const { type } = req.query;  // e.g., 'all' or 'my'
+    
+    const posts = await Post.findAll();  // Fetch all posts from the Post model
+    res.json(posts);  // Send posts to frontend
 });
 
-// Create a new post
+
+// routes/postsRoutes.js
 router.post('/', upload.single('image'), async (req, res) => {
     try {
+        const { content } = req.body;
+        const image = req.file ? `/uploads/posts/${req.file.filename}` : null;
+
         const postData = {
             user_id: req.session.userId,
-            content: req.body.content,
-            image: req.file ? `/uploads/posts/${req.file.filename}` : null
+            content,
+            image
         };
 
-        const postId = await Post.create(postData);
+        const postId = await Post.create(postData);  // Create post in DB
+
         res.json({ success: true, message: 'Post created successfully', postId });
     } catch (error) {
-        console.error('Error creating post:', error);
-        res.status(500).json({ message: 'Error creating post' });
+        res.status(500).json({ success: false, message: 'Error creating post' });
     }
 });
+
 
 // Delete a post
 router.delete('/:postId', async (req, res) => {
