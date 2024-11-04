@@ -16,13 +16,20 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// routes/postsRoutes.js
 router.get('/', async (req, res) => {
-    const { type } = req.query;  // e.g., 'all' or 'my'
-    
-    const posts = await Post.findAll();  // Fetch all posts from the Post model
-    res.json(posts);  // Send posts to frontend
+    const { type } = req.query;
+    const userId = req.session.userId;
+
+    let posts;
+    if (type === 'my') {
+        posts = await Post.findAllByUserId(userId);  // Fetch user's posts
+    } else {
+        posts = await Post.findAll();  // Fetch all posts
+    }
+
+    res.json(posts);
 });
+
 
 
 // routes/postsRoutes.js
