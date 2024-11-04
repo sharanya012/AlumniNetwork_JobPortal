@@ -29,18 +29,30 @@ const authenticateUser = (req, res, next) => {
 const authRoutes = require('./routes/authRoutes');
 app.use('/api', authRoutes);
 const profileRoutes = require('./routes/profileRoutes');
-app.use('/api', profileRoutes);
+app.use('/api/profile', profileRoutes);
 const postsRoutes = require('./routes/postsRoutes'); 
 app.use('/api/posts', postsRoutes);
 
 
-// Serve the profile page only to authenticated users
+// Serve Pages (HTML Files)
+// Profile page
 app.get('/profile', authenticateUser, (req, res) => {
-    if (req.session.userId) {
-        res.sendFile(path.join(__dirname, 'public', 'profile.html'));
-    } else {
-        res.redirect('/');
-    }
+    res.sendFile(path.join(__dirname, 'public', 'profile.html'));
+});
+
+// Posts page
+app.get('/posts', authenticateUser, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'posts.html'));
+});
+
+// Forums page
+app.get('/forums', authenticateUser, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'forums.html'));
+});
+
+// Default route (could be homepage or login)
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(3000, () => {
