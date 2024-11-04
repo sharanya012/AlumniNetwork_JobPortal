@@ -30,10 +30,17 @@ const authRoutes = require('./routes/authRoutes');
 app.use('/api', authRoutes);
 const profileRoutes = require('./routes/profileRoutes');
 app.use('/api', profileRoutes);
+const postsRoutes = require('./routes/postsRoutes'); 
+app.use('/api/posts', postsRoutes);
+
 
 // Serve the profile page only to authenticated users
 app.get('/profile', authenticateUser, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'profile.html'));
+    if (req.session.userId) {
+        res.sendFile(path.join(__dirname, 'public', 'profile.html'));
+    } else {
+        res.redirect('/');
+    }
 });
 
 app.listen(3000, () => {
