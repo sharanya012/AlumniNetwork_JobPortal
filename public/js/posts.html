@@ -223,21 +223,23 @@
         }
 
         // FormData handling for post creation
-        document.getElementById('createPostForm').addEventListener('submit', async function(event) {
-            event.preventDefault();  // Prevent default form submission
+            // FormData handling for post creation
+    document.getElementById('createPostForm').addEventListener('submit', async function(event) {
+        event.preventDefault();  // Prevent default form submission
 
-            // Create FormData to hold both text and file data
-            const formData = new FormData();
-            
-            const content = document.getElementById('postContent').value;  // Get post content
-            const imageUpload = document.getElementById('imageUpload').files[0];  // Get uploaded image (if any)
+        // Create FormData to hold both text and file data
+        const formData = new FormData();
+        
+        const content = document.getElementById('postContent').value;  // Get post content
+        const imageUpload = document.getElementById('imageUpload').files[0];  // Get uploaded image (if any)
 
-            // Append form data (content and image) to FormData
-            formData.append('content', content);  // Add post content to FormData
-            if (imageUpload) {
-                formData.append('image', imageUpload);  // Add image file to FormData (if an image is uploaded)
-            }
+        // Append form data (content and image) to FormData
+        formData.append('content', content);  // Add post content to FormData
+        if (imageUpload) {
+            formData.append('image', imageUpload);  // Add image file to FormData (if an image is uploaded)
+        }
 
+        try {
             // Send FormData to the server via POST
             const response = await fetch('/api/posts', {
                 method: 'POST',
@@ -248,5 +250,22 @@
             
             if (result.success) {
                 alert(result.message);  // Show success message
+                document.getElementById('createPostForm').reset();  // Reset form after submission
+                imagePreview.style.display = 'none';  // Hide image preview
+                removeImageBtn.style.display = 'none';  // Hide remove image button
                 fetchPosts();  // Reload posts after successful creation
-           
+            } else {
+                alert('Error creating post: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Error submitting post:', error);
+            alert('An error occurred while creating the post.');
+        }
+    });
+
+    // Load posts when the page loads
+    window.onload = () => fetchPosts('all');
+    </script>
+</body>
+</html>
+
