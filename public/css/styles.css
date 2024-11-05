@@ -11,7 +11,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(45deg, #162939 0%, #3f122f 100%);
     padding: 20px;
 }
 
@@ -63,7 +63,7 @@ h2 {
 
 .form-group input:focus,
 .form-group select:focus {
-    border-color: #667eea;
+    border-color: #3f122f;
     outline: none;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
@@ -77,7 +77,7 @@ h2 {
 .btn {
     width: 100%;
     padding: 15px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(45deg, #162939 0%, #3f122f 100%);
     border: none;
     border-radius: 10px;
     color: white;
@@ -104,14 +104,14 @@ p {
 }
 
 a {
-    color: #667eea;
+    color: #3f122f;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
 a:hover {
-    color: #764ba2;
+    color: #162939;
 }
 
 /* Form validation styles */
