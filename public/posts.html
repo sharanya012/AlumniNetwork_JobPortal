@@ -126,27 +126,6 @@
                         <button class="${post.userDisliked ? 'active' : ''}" onclick="reactToPost(${post.id}, 'dislike')">
                             👎 <span>${post.dislikes}</span>
                         </button>
-                        <button onclick="toggleComments(${post.id})">
-                            💬 <span>${post.comments.length}</span>
-                        </button>
-                    </div>
-                    <div class="comments-section" id="comments-${post.id}" style="display: none;">
-                        <div class="comments-list">
-                            ${post.comments.map(comment => `
-                                <div class="comment">
-                                    <img src="${comment.authorAvatar}" alt="Avatar" class="comment-avatar">
-                                    <div class="comment-content">
-                                        <strong>${comment.authorName}</strong>
-                                        <p>${comment.content}</p>
-                                        <span class="comment-date">${formatDate(comment.createdAt)}</span>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <form class="comment-form" onsubmit="addComment(event, ${post.id})">
-                            <input type="text" placeholder="Add a comment..." required>
-                            <button type="submit">Send</button>
-                        </form>
                     </div>
                 `; 
                 
@@ -167,32 +146,6 @@
             });
         }
 
-        // Toggle comments section
-        function toggleComments(postId) {
-            const commentsSection = document.getElementById(`comments-${postId}`);
-            commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
-        }
-
-        // Add comment
-        async function addComment(event, postId) {
-            event.preventDefault();
-            const form = event.target;
-            const input = form.querySelector('input');
-            const content = input.value;
-
-            const response = await fetch(`/api/posts/${postId}/comments`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ content }),
-            });
-
-            if (response.ok) {
-                input.value = '';
-                fetchPosts(document.querySelector('.feed-btn.active').dataset.feed);
-            }
-        }
 
         // Delete post
         async function deletePost(postId) {
@@ -223,48 +176,47 @@
         }
 
         // FormData handling for post creation
-            // FormData handling for post creation
-    document.getElementById('createPostForm').addEventListener('submit', async function(event) {
-        event.preventDefault();  // Prevent default form submission
+        document.getElementById('createPostForm').addEventListener('submit', async function(event) {
+            event.preventDefault();  // Prevent default form submission
 
-        // Create FormData to hold both text and file data
-        const formData = new FormData();
-        
-        const content = document.getElementById('postContent').value;  // Get post content
-        const imageUpload = document.getElementById('imageUpload').files[0];  // Get uploaded image (if any)
-
-        // Append form data (content and image) to FormData
-        formData.append('content', content);  // Add post content to FormData
-        if (imageUpload) {
-            formData.append('image', imageUpload);  // Add image file to FormData (if an image is uploaded)
-        }
-
-        try {
-            // Send FormData to the server via POST
-            const response = await fetch('/api/posts', {
-                method: 'POST',
-                body: formData  // Send form data, including the file
-            });
-
-            const result = await response.json();
+            // Create FormData to hold both text and file data
+            const formData = new FormData();
             
-            if (result.success) {
-                alert(result.message);  // Show success message
-                document.getElementById('createPostForm').reset();  // Reset form after submission
-                imagePreview.style.display = 'none';  // Hide image preview
-                removeImageBtn.style.display = 'none';  // Hide remove image button
-                fetchPosts();  // Reload posts after successful creation
-            } else {
-                alert('Error creating post: ' + result.message);
-            }
-        } catch (error) {
-            console.error('Error submitting post:', error);
-            alert('An error occurred while creating the post.');
-        }
-    });
+            const content = document.getElementById('postContent').value;  // Get post content
+            const imageUpload = document.getElementById('imageUpload').files[0];  // Get uploaded image (if any)
 
-    // Load posts when the page loads
-    window.onload = () => fetchPosts('all');
+            // Append form data (content and image) to FormData
+            formData.append('content', content);  // Add post content to FormData
+            if (imageUpload) {
+                formData.append('image', imageUpload);  // Add image file to FormData (if an image is uploaded)
+            }
+
+            try {
+                // Send FormData to the server via POST
+                const response = await fetch('/api/posts', {
+                    method: 'POST',
+                    body: formData  // Send form data, including the file
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(result.message);  // Show success message
+                    document.getElementById('createPostForm').reset();  // Reset form after submission
+                    imagePreview.style.display = 'none';  // Hide image preview
+                    removeImageBtn.style.display = 'none';  // Hide remove image button
+                    fetchPosts();  // Reload posts after successful creation
+                } else {
+                    alert('Error creating post: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error submitting post:', error);
+                alert('An error occurred while creating the post.');
+            }
+        });
+
+        // Load posts when the page loads
+        window.onload = () => fetchPosts('all');
     </script>
 </body>
 </html>
