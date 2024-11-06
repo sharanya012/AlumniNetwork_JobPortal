@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumNet - Job Offers</title>
+    <link rel="stylesheet" href="css/job_offer.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="js/jobs.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">AlumNet</div>
+            <div class="nav-links">
+                <a href="profile.html">Profile</a>
+                <a href="forums.html">Forums</a>
+                <a href="posts.html">Posts</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Job Posting Form -->
+        <section class="job-posting card">
+            <h3 class="section-title">Post a New Job</h3>
+            <form id="jobForm">
+                <input type="text" id="job-title" placeholder="Job Title" required />
+                <textarea id="job-description" placeholder="Job Description" rows="3" required></textarea>
+                <input type="text" id="job-role" placeholder="Role (intern, part time, full time)" required />
+                <input type="text" id="job-location" placeholder="Location" required />
+                <input type="number" id="job-salary" placeholder="Salary" required />
+                <input type="date" id="job-deadline" required />
+                <textarea id="required-skills" placeholder="Required Skills (comma separated)" rows="3" required></textarea>
+                <button type="submit" class="btn">Post Job</button>
+            </form>
+        </section>
+
+        <!-- Job Listing -->
+        <section class="job-listing card">
+            <h3 class="section-title">Job Offers</h3>
+            <div id="jobList" class="job-list">
+                <!-- Job offers will be dynamically loaded here -->
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.getElementById('jobForm').addEventListener('submit', async function(event) {
+            event.preventDefault();  // Prevent form submission
+
+            // Get form data
+            const jobData = {
+                title: document.getElementById('job-title').value,
+                description: document.getElementById('job-description').value,
+                role: document.getElementById('job-role').value,
+                location: document.getElementById('job-location').value,
+                salary: document.getElementById('job-salary').value,
+                application_deadline: document.getElementById('job-deadline').value,
+                required_skills: document.getElementById('required-skills').value,
+            };
+
+            // Send a POST request to create a new job offer
+            const response = await fetch('/api/jobs', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jobData),
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('Job posted successfully!');
+                loadJobs();  // Reload jobs
+            }
+        });
+
+        // Load all job offers
+        async function loadJobs() {
+            const response = await fetch('/api/jobs');
+            const jobs = await response.json();
+            
+            const jobList = document.getElementById('jobList');
+            jobList.innerHTML = '';  // Clear existing job listings
+
+            jobs.forEach(job => {
+                const jobItem = document.createElement('div');
+                jobItem.className = 'job-item';
+                jobItem.innerHTML = `
+                    <h4>${job.title}</h4>
+                    <p>${job.description}</p>
+                    <p><strong>Role:</strong> ${job.role}</p>
+                    <p><strong>Location:</strong> ${job.location}</p>
+                    <p><strong>Salary:</strong> ${job.salary}</p>
+                    <p><strong>Skills:</strong> ${job.required_skills}</p>
+                    <p><strong>Deadline:</strong> ${new Date(job.application_deadline).toDateString()}</p>
+                `;
+                jobList.appendChild(jobItem);
+            });
+        }
+
+        // Load jobs when the page loads
+        window.onload = () => loadJobs();
+    </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+/* Modern color palette and variables */
+:root {
+    --primary: #4776E6;
+    --primary-gradient: linear-gradient(45deg, #4776E6 0%, #8E54E9 100%);
+    --secondary: #FF6B6B;
+    --accent: #54E9D1;
+    --dark: #2C3E50;
+    --light: #F8F9FA;
+    --background: #E8F0FF;
+    --shadow: 0 8px 30px rgba(0,0,0,0.12);
+    --transition: all 0.3s ease;
+}
+
+/* Base styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background: var(--background);
+    color: var(--dark);
+}
+
+/* Header and Navigation styles */
+header {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 1.5rem 0;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+nav a:hover {
+    color: var(--accent);
+}
+
+/* Content container */
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.section-title {
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+h4 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+/* Job Application Form */
+#jobApplicationForm .form-group {
+    margin-bottom: 1rem;
+}
+
+#jobApplicationForm label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+#jobApplicationForm input,
+#jobApplicationForm select,
+#jobApplicationForm textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: 2px solid #eee;
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+#jobApplicationForm input:focus,
+#jobApplicationForm select:focus,
+#jobApplicationForm textarea:focus {
+    border-color: var(--accent);
+    outline: none;
+}
+
+/* Job Applications List */
+#applicationsList {
+    list-style: none;
+    padding: 0;
+}
+
+.application-item {
+    background: var(--light);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow);
+}
+
+.application-item h4 {
+    margin: 0;
+}
+
+.application-item p {
+    margin: 0.5rem 0;
+}
+
+/* Buttons */
+.btn {
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(71, 118, 230, 0.3);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--dark);
+    background: white;
+    margin-top: 2rem;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}

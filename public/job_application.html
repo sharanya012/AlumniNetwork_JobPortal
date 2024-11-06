@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumNet - Job Applications</title>
+    <link rel="stylesheet" href="css/job_application.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo">AlumNet</div>
+            <div class="nav-links">
+                <a href="profile.html">Profile</a>
+                <a href="forums.html">Forums</a>
+                <a href="posts.html">Posts</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section class="job-application-header card">
+            <h2>Apply for a Job</h2>
+            <p>Submit your application and cover letter below to apply for the job position.</p>
+        </section>
+
+        <section class="job-application-form card">
+            <h3 class="section-title">Application Form</h3>
+            <form id="jobApplicationForm">
+                <div class="form-group">
+                    <label for="jobTitle">Job Title:</label>
+                    <input type="text" id="jobTitle" value="Full Stack Developer" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <select id="status" required>
+                        <option value="submitted">Submitted</option>
+                        <option value="shortlisted">Shortlisted</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="coverLetter">Cover Letter:</label>
+                    <textarea id="coverLetter" rows="5" placeholder="Write your cover letter here..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn">Submit Application</button>
+            </form>
+        </section>
+
+        <section class="job-applications-list card">
+            <h3 class="section-title">Your Previous Applications</h3>
+            <ul id="applicationsList">
+                <li class="application-item">
+                    <h4>Frontend Developer</h4>
+                    <p>Status: <strong>Submitted</strong></p>
+                    <p>Cover Letter: Looking forward to joining your company!</p>
+                </li>
+                <li class="application-item">
+                    <h4>Backend Engineer</h4>
+                    <p>Status: <strong>Shortlisted</strong></p>
+                    <p>Cover Letter: Excited for the opportunity to work in backend development!</p>
+                </li>
+            </ul>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 AlumNet</p>
+    </footer>
+
+    <script>
+        // Handle form submission
+        document.getElementById('jobApplicationForm').addEventListener('submit', function (event) {
+            event.preventDefault();  // Prevent the default form submission
+
+            // Get form data
+            const status = document.getElementById('status').value;
+            const coverLetter = document.getElementById('coverLetter').value;
+
+            // Append the new application to the list
+            const applicationsList = document.getElementById('applicationsList');
+            const applicationItem = document.createElement('li');
+            applicationItem.classList.add('application-item');
+            applicationItem.innerHTML = `
+                <h4>${document.getElementById('jobTitle').value}</h4>
+                <p>Status: <strong>${status}</strong></p>
+                <p>Cover Letter: ${coverLetter}</p>
+            `;
+            applicationsList.appendChild(applicationItem);
+
+            // Clear the form
+            document.getElementById('jobApplicationForm').reset();
+        });
+    </script>
+
+</body>
+</html>
