@@ -1,37 +1,20 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        // Fetch profile data
-        const response = await fetch('/api/profile-data');
-        const result = await response.json();
+// routes/profile.js
+const express = require('express');
+const Profile = require('../models/profileModel');
+const router = express.Router();
 
-        if (result.success) {
-            // Update profile elements with user data
-            document.querySelector('.profile-name').textContent = 
-                `${result.data.firstName} ${result.data.lastName}`;
-            
-            // Update other profile elements
-            document.querySelector('.branch').textContent = 
-                `Branch: ${result.data.branch}`;
-            document.querySelector('.batch').textContent = 
-                `Batch: ${result.data.graduationYear}`;
+router.get('/profile/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const userProfile = await Profile.getUserProfileById(userId);
+        if (userProfile) {
+            res.json(userProfile);
+        } else {
+            res.status(404).json({ error: 'User profile not found' });
         }
     } catch (error) {
-        console.error('Error loading profile:', error);
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
-// Add logout functionality
-document.querySelector('.logout-btn')?.addEventListener('click', async () => {
-    try {
-        const response = await fetch('/api/logout', {
-            method: 'POST'
-        });
-        const result = await response.json();
-        
-        if (result.success) {
-            window.location.href = result.redirect;
-        }
-    } catch (error) {
-        console.error('Logout error:', error);
-    }
-});
+module.exports = router;

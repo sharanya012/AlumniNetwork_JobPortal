@@ -11,6 +11,9 @@ CREATE TABLE User_profile (
     profile_picture VARCHAR(255)
 );
 
+
+
+
 CREATE TABLE User_login (
     user_id INT PRIMARY KEY,  -- 1:1 relationship, uses the same user_id
     email VARCHAR(100) UNIQUE,
