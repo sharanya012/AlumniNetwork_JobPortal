@@ -11,6 +11,7 @@ router.post('/signup', async (req, res) => {
                 message: 'Email already registered'
             });
         }
+        
         const userId = await User.create(req.body);
         req.session.userId = userId; // Set session
 
@@ -41,7 +42,7 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        const isValidPassword = await User.verifyPassword(password, user.password_hash);
+        const isValidPassword = await User.verifyPassword(password, user.password);
         if (!isValidPassword) {
             return res.status(401).json({
                 success: false,
@@ -49,8 +50,8 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        req.session.userId = user.id; // Set session
-
+        req.session.userId = user.user_id; // Use user_id from user_login table
+        
         res.json({
             success: true,
             message: 'Login successful',
@@ -65,7 +66,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Add logout route
 router.post('/logout', (req, res) => {
     req.session.destroy();
     res.json({

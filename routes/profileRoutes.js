@@ -151,4 +151,25 @@ router.post('/join-forum', async (req, res) => {
     }
 });
 
+// Get profile page (Make sure to send profile data to this page when it's accessed)
+router.get('/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json({
+            firstName: user.first_name,
+            lastName: user.last_name,
+            email: user.email,
+            graduationYear: user.graduation_year,
+            branch: user.branch_of_study,
+            profilePicture: user.profile_picture_url
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch profile data' });
+    }
+});
+
 module.exports = router;

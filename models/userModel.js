@@ -1,4 +1,3 @@
-// models/userModel.js
 const db = require('../config/database');
 const bcrypt = require('bcrypt');
 
@@ -8,7 +7,7 @@ class User {
             // Hash the password
             const hashedPassword = await bcrypt.hash(userData.password, 10);
             
-            // Start a transaction (use `query` instead of `execute` for transaction commands)
+            // Start a transaction
             await db.query('START TRANSACTION');
 
             const [batchResult] = await db.execute(
@@ -67,7 +66,7 @@ class User {
     static async findByEmail(email) {
         try {
             const [rows] = await db.execute(
-                `SELECT up.*, ul.email, ul.phone_no, ul.registration_date, ul.user_type 
+                `SELECT up.*, ul.email, ul.password, ul.phone_no, ul.registration_date, ul.user_type 
                 FROM User_profile up
                 JOIN User_login ul ON up.user_id = ul.user_id
                 WHERE ul.email = ?`,
@@ -80,6 +79,13 @@ class User {
     }
 
     static async verifyPassword(plainPassword, hashedPassword) {
+        console.log("Plain Password:", plainPassword);   // For debugging
+        console.log("Hashed Password:", hashedPassword); // For debugging
+        
+        if (!plainPassword || !hashedPassword) {
+            throw new Error("Password and hash are required");
+        }
+
         return await bcrypt.compare(plainPassword, hashedPassword);
     }
 
