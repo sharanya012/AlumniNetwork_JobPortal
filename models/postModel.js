@@ -20,9 +20,9 @@ class Post {
     static async findAll() {
         try {
             const [rows] = await db.execute(
-                `SELECT posts.*, users.first_name, users.last_name, users.profile_picture 
+                `SELECT posts.*, user_profile.first_name, user_profile.last_name, user_profile.profile_picture 
                  FROM posts
-                 JOIN users ON posts.user_id = users.id
+                 JOIN user_profile ON posts.user_id = user_profile.id
                  ORDER BY posts.created_at DESC`
             );
             return rows;
@@ -34,9 +34,9 @@ class Post {
     static async findByUserId(userId) {
         try {
             const [rows] = await db.execute(
-                `SELECT posts.*, users.first_name, users.last_name, users.profile_picture 
+                `SELECT posts.*, user_profile.first_name, user_profile.last_name, user_profile.profile_picture 
                  FROM posts
-                 JOIN users ON posts.user_id = users.id
+                 JOIN user_profile ON posts.user_id = user_profile.id
                  WHERE posts.user_id = ?
                  ORDER BY posts.created_at DESC`,
                 [userId]
@@ -49,7 +49,7 @@ class Post {
 
     static async delete(postId, userId) {
         try {
-            await db.execute(`DELETE FROM posts WHERE id = ? AND user_id = ?`, [postId, userId]);
+            await db.execute(`DELETE FROM posts WHERE post_id = ? AND user_id = ?`, [postId, userId]);
             return true;
         } catch (error) {
             throw error;
@@ -84,5 +84,7 @@ class Post {
         }
     }
 }
+
+
 
 module.exports = Post;
