@@ -20,17 +20,58 @@
     
     <div class="content">
         <h2>Forum Discussions</h2>
-        <ul>
-            <!-- Dynamic forum topics can go here -->
-            <li>Batch and Branch Forum</li>
-            <li>Forum Topic 2</li>
-            <li>Forum Topic 3</li>
+        <ul id="forumList">
+            <!-- Dynamic forum topics will be rendered here -->
         </ul>
-        <button class="btn">Create New Topic</button>
+        <button class="btn" id="createForumBtn">Create New Topic</button>
     </div>
     
     <footer>
         <p>&copy; 2024 Alumni Network</p>
     </footer>
+
+    <script>
+        // Function to fetch forums from the server
+        async function fetchForums() {
+            const response = await fetch('/api/forums');  // Fetch forums from the backend
+            const forums = await response.json();
+
+            const forumList = document.getElementById('forumList');
+            forumList.innerHTML = '';  // Clear existing forum list
+
+            // Loop through the forums and display them
+            forums.forEach(forum => {
+                const forumItem = document.createElement('li');
+                forumItem.textContent = forum.title;
+                forumList.appendChild(forumItem);
+            });
+        }
+
+        // Function to create a new forum
+        async function createForum() {
+            const forumTitle = prompt("Enter forum title:");  // Prompt user for forum title
+            if (!forumTitle) return;
+
+            const response = await fetch('/api/forums', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: forumTitle, admin_user_id: 1 })  // Assuming the admin user ID is 1
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert(result.message);
+                fetchForums();  // Refresh forum list
+            } else {
+                alert('Error creating forum');
+            }
+        }
+
+        // Load forums when the page loads
+        window.onload = fetchForums;
+
+        // Attach event listener to "Create New Topic" button
+        document.getElementById('createForumBtn').addEventListener('click', createForum);
+    </script>
 </body>
 </html>
