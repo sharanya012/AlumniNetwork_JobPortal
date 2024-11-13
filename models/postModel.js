@@ -22,7 +22,7 @@ class Post {
             const [rows] = await db.execute(
                 `SELECT posts.*, user_profile.first_name, user_profile.last_name, user_profile.profile_picture 
                  FROM posts
-                 JOIN user_profile ON posts.user_id = user_profile.id
+                 JOIN user_profile ON posts.user_id = user_profile.user_id
                  ORDER BY posts.created_at DESC`
             );
             return rows;

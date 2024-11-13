@@ -1,9 +1,9 @@
 /* Modern color palette and variables */
 :root {
-    --primary: #4776E6;
-    --primary-gradient: linear-gradient(45deg, #4776E6 0%, #8E54E9 100%);
-    --secondary: #FF6B6B;
-    --accent: #54E9D1;
+    --primary: #9f8f99;
+    --primary-gradient: linear-gradient(45deg, #162939 0%, #3f122f 100%);
+    --secondary: #cfcfcf;
+    --accent: #d8ccc9;
     --dark: #2C3E50;
     --light: #F8F9FA;
     --background: #E8F0FF;

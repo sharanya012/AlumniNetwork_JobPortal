@@ -20,9 +20,9 @@
     
     <div class="content">
         <h2>Forum Discussions</h2>
-        <ul id="forumList">
+        <div id="forumList">
             <!-- Dynamic forum topics will be rendered here -->
-        </ul>
+        </div>
         <button class="btn" id="createForumBtn">Create New Topic</button>
     </div>
     
@@ -39,9 +39,10 @@
             const forumList = document.getElementById('forumList');
             forumList.innerHTML = '';  // Clear existing forum list
 
-            // Loop through the forums and display them
+            // Loop through the forums and display them as button-like boxes
             forums.forEach(forum => {
-                const forumItem = document.createElement('li');
+                const forumItem = document.createElement('div');
+                forumItem.classList.add('forum-item');
                 forumItem.textContent = forum.title;
                 forumList.appendChild(forumItem);
             });
@@ -50,7 +51,12 @@
         // Function to create a new forum
         async function createForum() {
             const forumTitle = prompt("Enter forum title:");  // Prompt user for forum title
-            if (!forumTitle) return;
+
+            // Check if the user provided a title
+            if (!forumTitle.trim()) {
+                alert("Please enter a forum title.");
+                return;
+            }
 
             const response = await fetch('/api/forums', {
                 method: 'POST',
