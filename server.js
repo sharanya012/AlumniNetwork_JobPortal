@@ -1,27 +1,39 @@
 const express = require('express');
 const path = require('path');
-const session = require('express-session'); // Add this package: npm install express-session
+const session = require('express-session');
+const mysql = require('mysql2');
+require('dotenv').config();
+
 const app = express();
 
+// MySQL connection
+const db = mysql.createPool({
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'ShArAnYa123!@#',
+    database: process.env.DB_NAME || 'alumni_portal'
+});
 
 // Middleware
 app.use(express.json());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-    secret: 'your-secret-key',
+    key: 'session_cookie_name',
+    secret: 'your-secret-key', // Use a secure secret key
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } // set to true if using https
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 2 // 2 hours
+    }
 }));
-
 
 // Authentication middleware
 const authenticateUser = (req, res, next) => {
     if (req.session.userId) {
-        next();
+        next(); // If session exists, proceed to the next middleware/route
     } else {
-        res.redirect('/');
+        res.redirect('/'); // Redirect to the login page if no session
     }
 };
 
@@ -36,9 +48,11 @@ app.use('/api/posts', postsRoutes);
 
 // Serve Pages (HTML Files)
 // Profile page
-app.get('/profile', authenticateUser, (req, res) => {
+app.get('/profile/:id', authenticateUser, async (req, res) => {
+    const userId = req.params.id;
     res.sendFile(path.join(__dirname, 'public', 'profile.html'));
 });
+
 
 // Posts page
 app.get('/posts', authenticateUser, (req, res) => {
@@ -55,6 +69,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(3000, () => {
-    console.log('Server running on port 3000');
+app.listen(3001, () => {
+    console.log('Server running on port 3001');
 });

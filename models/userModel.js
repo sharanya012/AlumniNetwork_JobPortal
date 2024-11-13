@@ -10,22 +10,13 @@ class User {
             // Start a transaction
             await db.query('START TRANSACTION');
 
-            const [batchResult] = await db.execute(
-                `INSERT INTO Batch_branch_forum (
-                    branch_name, year_of_graduation
-                ) VALUES (?, ?)`,
-                [
-                    userData.branch,
-                    userData.graduation_year
-                ]
-            );
-            
-            // Insert into User_profile
-            const [profileResult] = await db.execute(
-                `INSERT INTO User_profile (
+            const [result] = await db.execute(
+                `INSERT INTO all_users_info (
                     first_name, middle_name, last_name, user_type, 
-                    work_experience, resume, profile_picture
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                    work_experience, resume, profile_picture, 
+                    email, password, phone_no, registration_date, 
+                    branch_name, year_of_graduation
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)`,
                 [
                     userData.first_name,
                     userData.middle_name || null,
@@ -33,24 +24,16 @@ class User {
                     userData.user_type,
                     userData.work_experience || null,
                     userData.resume || null,
-                    userData.profile_picture || null
-                ]
-            );
-
-            // Insert into User_login using the user_id from User_profile
-            const userId = profileResult.insertId;
-            await db.execute(
-                `INSERT INTO User_login (
-                    user_id, email, password, phone_no, registration_date, user_type
-                ) VALUES (?, ?, ?, ?, NOW(), ?)`,
-                [
-                    userId,
+                    userData.profile_picture || null,
                     userData.email,
                     hashedPassword,
                     userData.phone,
-                    userData.user_type
+                    userData.branch,
+                    userData.graduation_year
                 ]
             );
+
+            return result.insertId;
 
             // Commit the transaction
             await db.query('COMMIT');
@@ -66,10 +49,7 @@ class User {
     static async findByEmail(email) {
         try {
             const [rows] = await db.execute(
-                `SELECT up.*, ul.email, ul.password, ul.phone_no, ul.registration_date, ul.user_type 
-                FROM User_profile up
-                JOIN User_login ul ON up.user_id = ul.user_id
-                WHERE ul.email = ?`,
+                `SELECT * FROM all_users_info WHERE email = ?`,
                 [email]
             );
             return rows[0];
@@ -92,10 +72,7 @@ class User {
     static async findById(id) {
         try {
             const [rows] = await db.execute(
-                `SELECT up.*, ul.email, ul.phone_no, ul.registration_date, ul.user_type 
-                FROM User_profile up
-                JOIN User_login ul ON up.user_id = ul.user_id
-                WHERE up.user_id = ?`,
+                `SELECT * FROM all_users_info WHERE user_id = ?`,
                 [id]
             );
             return rows[0];

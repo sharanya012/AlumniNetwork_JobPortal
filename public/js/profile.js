@@ -1,76 +1,49 @@
-// routes/authRoutes.js
-const express = require('express');
-const User = require('../models/userModel');
-const router = express.Router();
-
-router.post('/signup', async (req, res) => {
+async function fetchUserProfile() {
+    const userId = window.location.pathname.split('/')[2]; // Extract user ID from the URL
     try {
-        const existingUser = await User.findByEmail(req.body.email);
-        if (existingUser) {
-            return res.status(400).json({
-                success: false,
-                message: 'Email already registered'
-            });
-        }
-        const userId = await User.create(req.body);
-        req.session.userId = userId; // Store userId in session
-        res.json({
-            success: true,
-            message: 'Registration successful',
-            redirect: '/profile'
+        const response = await fetch(`/api/profile/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
+
+        if (response.ok) {
+            const userData = await response.json();
+            displayUserProfile(userData);
+        } else {
+            console.error('Failed to fetch user profile');
+        }
     } catch (error) {
-        console.error('Signup error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'An error occurred during registration'
-        });
+        console.error('Error fetching user profile:', error);
     }
-});
+}
 
-router.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        console.log('Login attempt:', { email });
+// Function to display the user profile on the page
+function displayUserProfile(userData) {
+    const profileName = document.querySelector('.profile-name');
+    const profileBranch = document.querySelector('.profile-branch');
+    const profilePic = document.querySelector('.profile-pic img');
 
-        const user = await User.findByEmail(email);
-        if (!user) {
-            return res.status(401).json({
-                success: false,
-                message: 'Invalid email or password'
-            });
-        }
-
-        const isValidPassword = await User.verifyPassword(password, user.password);
-        if (!isValidPassword) {
-            return res.status(401).json({
-                success: false,
-                message: 'Invalid email or password'
-            });
-        }
-
-        req.session.userId = user.id; // Store userId in session
-        res.json({
-            success: true,
-            message: 'Login successful',
-            redirect: '/profile' // Redirect to profile after successful login
-        });
-    } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'An error occurred during login'
-        });
+    if (userData) {
+        profileName.innerText = userData.name || 'Name not available';
+        //profileBranch.innerText = `Branch: ${userData.branch || 'Not specified'} | Batch: ${userData.batch || 'Not specified'}`;
+        //profilePic.src = userData.profilePic || 'placeholder-profile.jpg'; // Use placeholder if no profile pic available
+    } else {
+        profileName.innerText = 'Profile not found';
     }
+}
+
+
+// Initialize the profile page
+document.addEventListener('DOMContentLoaded', () => {
+    fetchUserProfile();
+
 });
 
-// Add logout route
-router.post('/logout', (req, res) => {
-    req.session.destroy(); // Destroy the session
-    res.json({
-        success: true,
-        redirect: '/' // Redirect to home page after logout
-    });
-});
 
-module.exports = router;
+
+
+
+
+

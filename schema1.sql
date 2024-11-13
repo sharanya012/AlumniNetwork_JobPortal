@@ -1,5 +1,26 @@
 use alumni_portal;
 
+//updated table 
+
+CREATE TABLE all_users_info (
+    user_id INT NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(100),
+    middle_name VARCHAR(100),
+    last_name VARCHAR(100),
+    user_type ENUM('alumni', 'student', 'employee', 'admin'),
+    work_experience TEXT,
+    resume TEXT,
+    profile_picture VARCHAR(255),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(100),
+    phone_no VARCHAR(15),
+    registration_date DATE,
+    branch_name VARCHAR(100),
+    year_of_graduation YEAR,
+    PRIMARY KEY (user_id)
+);
+
+
 CREATE TABLE user_profile (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(100),

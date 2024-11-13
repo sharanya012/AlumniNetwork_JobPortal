@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AlumNet - Alumni Profile</title>
-    <link rel="stylesheet" href="css/profile_styles.css">
+    <link rel="stylesheet" href="/profstyle.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <script src="js/profile.js" defer></script>
+    <script src="/profile.js" defer></script>
 </head>
 <body>
 
@@ -30,7 +30,7 @@
             </div>
             <div class="profile-info">
                 <h2 class="profile-name">Loading...</h2>
-                <p>Branch: - | Batch: -</p>
+                <p class="branch-batch">Branch & Batch: <span class="profile-branch">Loading...</span> | <span class="profile-batch">Loading...</span></p>
             </div>
         </section>
 
@@ -71,101 +71,17 @@
             <div class="experience-list" id="experience-list"></div>
         </section>
 
-        <section class="forums card">
-            <h3 class="section-title">Forums</h3>
-            <ul>
-                <li class="tooltip">Tech Innovators<span class="tooltiptext">Discuss latest tech trends</span></li>
-                <li class="tooltip">Career Development<span class="tooltiptext">Share career advice and opportunities</span></li>
-                <li class="tooltip">Startup Network<span class="tooltiptext">Connect with fellow entrepreneurs</span></li>
-                <li class="tooltip">Alumni Meetups<span class="tooltiptext">Organize and join alumni events</span></li>
-            </ul>
-        </section>
-    </div>
+        
 
     <script>
-        function uploadResume() {
-            const fileInput = document.getElementById('resume-file');
-            const resumeLink = document.getElementById('resume-link');
-            if (fileInput.files.length > 0) {
-                const fileName = fileInput.files[0].name ;
-                resumeLink.textContent = `Resume: ${fileName}`;
-                resumeLink.href = URL.createObjectURL(fileInput.files[0]);
-            }
+        // Example function to load branch and batch beautifully
+        function loadProfileInfo() {
+            document.querySelector('.profile-branch').textContent = 'Computer Science';
+            document.querySelector('.profile-batch').textContent = 'Batch of 2022';
         }
 
-        function addSocialLinks() {
-            const linkedinInput = document.getElementById('linkedin');
-            const githubInput = document.getElementById('github');
-            const websiteInput = document.getElementById('website');
-            const socialLinksDiv = document.getElementById('social-links');
-
-            const linkedinLink = document.createElement('a');
-            linkedinLink.href = linkedinInput.value;
-            linkedinLink.textContent = 'LinkedIn';
-            socialLinksDiv.appendChild(linkedinLink);
-
-            const githubLink = document.createElement('a');
-            githubLink.href = githubInput.value;
-            githubLink.textContent = 'GitHub';
-            socialLinksDiv.appendChild(githubLink);
-
-            const websiteLink = document.createElement('a');
-            websiteLink.href = websiteInput.value;
-            websiteLink.textContent = 'Personal Website';
-            socialLinksDiv.appendChild(websiteLink);
-        }
-
-        function postThoughts() {
-            const thoughtsInput = document.getElementById('thoughts');
-            const thoughtsDisplay = document.getElementById('thoughts-display');
-            const thought = document.createElement('p');
-            thought.textContent = thoughtsInput.value;
-            thoughtsDisplay.appendChild(thought);
-            thoughtsInput.value = '';
-        }
-
-        function toggleExperienceForm() {
-            const experienceForm = document.getElementById('experience-form');
-            const updateButton = document.getElementById('update-button');
-            if (experienceForm.style.display === 'none') {
-                experienceForm.style.display = 'block';
-                updateButton.textContent = 'Hide Experience Form';
-            } else {
-                experienceForm.style.display = 'none';
-                updateButton.textContent = 'Update Experience';
-            }
-        }
-
-        function addExperience(event) {
-            event.preventDefault();
-            const jobTitleInput = document.getElementById('job-title');
-            const companyNameInput = document.getElementById('company-name');
-            const durationInput = document.getElementById('duration');
-            const responsibilitiesInput = document.getElementById('responsibilities');
-            const experienceListDiv = document.getElementById('experience-list');
-
-            const experienceItem = document.createElement('div');
-            experienceItem.className = 'experience-item';
-
-            const jobTitle = document.createElement('h4');
-            jobTitle.textContent = jobTitleInput.value;
-            experienceItem.appendChild(jobTitle);
-
-            const companyName = document.createElement('p');
-            companyName.textContent = companyNameInput.value;
-            experienceItem.appendChild(companyName);
-
-            const duration = document.createElement('p');
-            duration.textContent = durationInput.value;
-            experienceItem.appendChild(duration);
-
-            const responsibilities = document.createElement('p');
-            responsibilities.textContent = responsibilitiesInput.value;
-            experienceItem.appendChild(responsibilities);
-
-            experienceListDiv.appendChild(experienceItem);
-        }
+        // Load profile info when the page loads
+        document.addEventListener('DOMContentLoaded', loadProfileInfo);
     </script>
-
 </body>
 </html>
