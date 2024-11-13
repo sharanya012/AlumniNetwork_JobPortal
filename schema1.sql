@@ -1,6 +1,6 @@
 use alumni_portal;
 
-//updated table 
+<--updated table -->
 
 CREATE TABLE all_users_info (
     user_id INT NOT NULL AUTO_INCREMENT,
@@ -68,32 +68,17 @@ CREATE TABLE reacts_to (
     FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE
 );
 
-CREATE TABLE batch_branch_forum (
-    branch_batch_id INT AUTO_INCREMENT PRIMARY KEY,
-    branch_name VARCHAR(100),
-    year_of_graduation YEAR
-);
-
-CREATE TABLE updates (
-    user_id INT PRIMARY KEY,
-    branch_batch_id INT,
-    FOREIGN KEY (user_id) REFERENCES user_profile(user_id),
-    FOREIGN KEY (branch_batch_id) REFERENCES batch_branch_forum(branch_batch_id)
-);
-
-CREATE TABLE batch_forum (
-    branch_batch_id INT,
-    topic VARCHAR(255),
-    custom_date DATE,
-    post_count INT,
-    FOREIGN KEY (branch_batch_id) REFERENCES batch_branch_forum(branch_batch_id)
-);
-
+-- Combined Forum Table
 CREATE TABLE forum (
     forum_id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255),
-    no_of_users INT,
-    admin_user_id INT,
+    topic VARCHAR(255),            -- Optional for general forums
+    year_of_graduation YEAR DEFAULT NULL,       -- Can be NULL for non-batch-specific forums
+    custom_date DATE,              -- Optional for custom forums
+    branch_name VARCHAR(100),
+    no_of_users INT DEFAULT 0,
+    post_count INT DEFAULT 0,
+    admin_user_id INT,             -- Forum admin
     FOREIGN KEY (admin_user_id) REFERENCES user_profile(user_id)
 );
 
