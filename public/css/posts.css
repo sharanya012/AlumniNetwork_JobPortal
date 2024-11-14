@@ -29,6 +29,9 @@ header {
     top: 0;
     z-index: 1000;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 header h1 {
@@ -39,6 +42,7 @@ nav {
     display: flex;
     justify-content: center;
     gap: 2rem;
+    margin-top: 1rem;
 }
 
 nav a {
@@ -50,6 +54,43 @@ nav a {
 
 nav a:hover {
     color: var(--accent);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-container {
+    display: flex;
+    gap: 8px;
+}
+
+#userSearch {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 200px;
+}
+
+.search-btn {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+.no-posts {
+    text-align: center;
+    padding: 20px;
+    color: #666;
 }
 
 /* Content container */

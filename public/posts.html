@@ -9,13 +9,19 @@
 <body>
     <header>
         <h1>Posts</h1>
-        <nav>
-            <a href="profile.html/:id">Profile</a> 
-            <a href="forums.html">Forums</a> 
-            <a href="job_details.html">Apply for Jobs</a> 
-            <a href="job_listing.html">Job Offers</a>            
-            <a href="#">Logout</a>
-        </nav>
+        <div class="header-right">
+            <div class="search-container">
+                <input type="text" id="userSearch" placeholder="Search by username...">
+                <button id="searchButton" class="search-btn">Search</button>
+            </div>
+            <nav>
+                <a href="profile.html">Profile</a> 
+                <a href="forums.html">Forums</a> 
+                <a href="job_details.html">Apply for Jobs</a> 
+                <a href="job_listing.html">Job Offers</a>            
+                <a href="index.html">Logout</a>
+            </nav>
+        </div>
     </header>
     
     <div class="content">
@@ -63,6 +69,8 @@
         const imageUpload = document.getElementById('imageUpload');
         const imagePreview = document.getElementById('preview');
         const removeImageBtn = document.getElementById('removeImage');
+        const userSearch = document.getElementById('userSearch');
+        const searchButton = document.getElementById('searchButton');
 
         imageUpload.addEventListener('change', function(event) {
             const file = event.target.files[0];
@@ -84,10 +92,33 @@
             removeImageBtn.style.display = 'none';
         });
 
+        // Search functionality
+        searchButton.addEventListener('click', handleSearch);
+        userSearch.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleSearch();
+            }
+        });
+
+        async function handleSearch() {
+        const searchTerm = userSearch.value.trim();
+        if (searchTerm) {
+            // Remove active class from feed buttons during search
+            feedButtons.forEach(btn => btn.classList.remove('active'));
+            await fetchPosts('search', searchTerm);
+        } else {
+            // Prompt the user to enter a name if search field is empty
+            alert('Please enter a username to search.');
+            userSearch.focus();
+        }
+    }
+
+
         // Feed switching functionality
         const feedButtons = document.querySelectorAll('.feed-btn');
         feedButtons.forEach(button => {
             button.addEventListener('click', () => {
+                userSearch.value = ''; // Clear search when switching feeds
                 feedButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
                 fetchPosts(button.dataset.feed);
@@ -95,46 +126,65 @@
         });
 
         // Fetch and display posts
-        async function fetchPosts(feedType = 'all') {
-            const response = await fetch(`/api/posts?type=${feedType}`);
-            const posts = await response.json();
+        async function fetchPosts(feedType = 'all', searchTerm = '') {
+            try {
+                let url = `/api/posts?type=${feedType}`;
+                if (feedType === 'search' && searchTerm) {
+                    url = `/api/posts/search?username=${encodeURIComponent(searchTerm)}`;
+                }
 
-            const postsList = document.getElementById('postsList');
-            postsList.innerHTML = '';
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch posts');
+                }
 
-            posts.forEach(post => {
-                const li = document.createElement('li');
-                li.className = 'post-card';
-                
-                let postContent = `
-                    <div class="post-header">
-                        <div class="post-author">
-                            <img src="${post.authorAvatar}" alt="Avatar" class="author-avatar">
-                            <div class="author-info">
-                                <h3>${post.authorName}</h3>
-                                <span class="post-date">${formatDate(post.createdAt)}</span>
+                const posts = await response.json();
+                const postsList = document.getElementById('postsList');
+                postsList.innerHTML = '';
+
+                if (posts.length === 0) {
+                    postsList.innerHTML = '<li class="no-posts">No posts found.</li>';
+                    return;
+                }
+
+                posts.forEach(post => {
+                    const li = document.createElement('li');
+                    li.className = 'post-card';
+                    
+                    li.innerHTML = `
+                        <div class="post-header">
+                            <div class="post-author">
+                                <img src="${post.authorAvatar || '/images/default-avatar.png'}" alt="Avatar" class="author-avatar">
+                                <div class="author-info">
+                                    <h3>${post.authorName}</h3>
+                                    <span class="post-date">${formatDate(post.createdAt)}</span>
+                                </div>
                             </div>
+                            ${post.isMine ? '<button class="delete-btn" onclick="deletePost(' + post.id + ')">Delete</button>' : ''}
                         </div>
-                        ${post.isMine ? '<button class="delete-btn" onclick="deletePost(' + post.id + ')">Delete</button>' : ''}
-                    </div>
-                    <div class="post-content">
-                        <p>${post.content}</p>
-                        ${post.image ? `<div class="post-image"><img src="${post.image}" alt="Post image"></div>` : ''}
-                    </div>
-                    <div class="post-actions">
-                        <button class="${post.userLiked ? 'active' : ''}" onclick="reactToPost(${post.id}, 'like')">
-                            👍 <span>${post.likes}</span>
-                        </button>
-                        <button class="${post.userDisliked ? 'active' : ''}" onclick="reactToPost(${post.id}, 'dislike')">
-                            👎 <span>${post.dislikes}</span>
-                        </button>
-                    </div>
-                `; 
-                
-                li.innerHTML = postContent;
-                postsList.appendChild(li);
-            });
+                        <div class="post-content">
+                            <p>${post.content}</p>
+                            ${post.image ? `<div class="post-image"><img src="${post.image}" alt="Post image"></div>` : ''}
+                        </div>
+                        <div class="post-actions">
+                            <button class="${post.userLiked ? 'active' : ''}" onclick="reactToPost(${post.id}, 'like')">
+                                👍 <span>${post.likes}</span>
+                            </button>
+                            <button class="${post.userDisliked ? 'active' : ''}" onclick="reactToPost(${post.id}, 'dislike')">
+                                👎 <span>${post.dislikes}</span>
+                            </button>
+                        </div>
+                    `; 
+                    
+                    postsList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+                document.getElementById('postsList').innerHTML = 
+                    '<li class="error-message">Error loading posts. Please try again later.</li>';
+            }
         }
+
 
         // Helper function to format dates
         function formatDate(dateString) {
@@ -147,7 +197,6 @@
                 minute: '2-digit'
             });
         }
-
 
         // Delete post
         async function deletePost(postId) {
@@ -179,35 +228,31 @@
 
         // FormData handling for post creation
         document.getElementById('createPostForm').addEventListener('submit', async function(event) {
-            event.preventDefault();  // Prevent default form submission
+            event.preventDefault();
 
-            // Create FormData to hold both text and file data
             const formData = new FormData();
-            
-            const content = document.getElementById('postContent').value;  // Get post content
-            const imageUpload = document.getElementById('imageUpload').files[0];  // Get uploaded image (if any)
+            const content = document.getElementById('postContent').value;
+            const imageUpload = document.getElementById('imageUpload').files[0];
 
-            // Append form data (content and image) to FormData
-            formData.append('content', content);  // Add post content to FormData
+            formData.append('content', content);
             if (imageUpload) {
-                formData.append('image', imageUpload);  // Add image file to FormData (if an image is uploaded)
+                formData.append('image', imageUpload);
             }
 
             try {
-                // Send FormData to the server via POST
                 const response = await fetch('/api/posts', {
                     method: 'POST',
-                    body: formData  // Send form data, including the file
+                    body: formData
                 });
 
                 const result = await response.json();
                 
                 if (result.success) {
-                    alert(result.message);  // Show success message
-                    document.getElementById('createPostForm').reset();  // Reset form after submission
-                    imagePreview.style.display = 'none';  // Hide image preview
-                    removeImageBtn.style.display = 'none';  // Hide remove image button
-                    fetchPosts();  // Reload posts after successful creation
+                    alert(result.message);
+                    document.getElementById('createPostForm').reset();
+                    imagePreview.style.display = 'none';
+                    removeImageBtn.style.display = 'none';
+                    fetchPosts();
                 } else {
                     alert('Error creating post: ' + result.message);
                 }
