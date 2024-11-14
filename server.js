@@ -44,6 +44,8 @@ const profileRoutes = require('./routes/profileRoutes');
 app.use('/api/profile', profileRoutes);
 const postsRoutes = require('./routes/postsRoutes'); 
 app.use('/api/posts', postsRoutes);
+const forumRoutes = require('./routes/forumRoutes'); 
+app.use('/api/forums', forumRoutes);
 
 
 // Serve Pages (HTML Files)
